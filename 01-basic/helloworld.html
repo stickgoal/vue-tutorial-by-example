@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue起步</title>
+	<meta charset="utf-8"/>
+	<script type="text/javascript" src="../res/js/vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<h2>hi,{{username}}</h2>
+	<p>{{greeting}}</p>
+	<p @click="sayHi">{{message}}</p>
+	<p v-if="seen">hi</p>
+</div>
+
+<script type="text/javascript">
+	/*声明式渲染*/
+	var app = new Vue({
+	  el: '#app',
+	  data: {
+	    username: 'Vue!',
+	    greeting: new Date().getHours() >12?'下午好':'上午好',
+	    message:'页面加载于 ' + new Date().toLocaleString(),
+	    seen:true
+	  },
+	  methods:{
+	  	sayHi:function(){
+	  		alert("hi!"+this.username);
+	  	}
+	  }
+	});
+</script>
+
+</body>
+</html>
