@@ -1,4 +1,4 @@
-# Vue入门课程
+# Vue入门课程大纲
 
 1. Vue概述 [官网介绍](https://cn.vuejs.org/v2/guide/index.html)
 
@@ -27,6 +27,11 @@
 2. [基础实例](01-basic/helloworld.html)
 
    - [vue实例](https://cn.vuejs.org/v2/guide/instance.html)
+
+     - 生命周期
+
+       ![lifecycle](/res/lifecycle.png)
+
    - Vue 实例的[API](https://cn.vuejs.org/v2/api/#%E9%80%89%E9%A1%B9-%E6%95%B0%E6%8D%AE)  主要有 
      - el :  挂载到的DOM元素
      - data  :  数据
@@ -46,6 +51,7 @@
        - v-on           根据数据动态绑定事件 v-on:click     =缩写=>  @click
        - v-bind       根据数据动态绑定HTML属性 v-bind:href   =缩写=>  :href
        - v-show
+       - v-model    用来双向绑定DOM和数据
 
      - 修饰符，添加一些额外功能 v-on:submit.prevent="onSubmit"  其中的.prevent能够防止默认行为
 
@@ -72,10 +78,112 @@
 
 4. 组件
 
-   - 组件基础
+   4.1 Vue.component(组件id，选项或者构造器)  全局注册组件
+
+   - [选项](https://cn.vuejs.org/v2/api/#%E9%80%89%E9%A1%B9-%E6%95%B0%E6%8D%AE)包括：
+     - data  		[数据]用于渲染模板的数据
+     - methods  [方法]在Vue实例中可以使用的方法，例如事件处理函数
+     - props        [属性] 定义本组件的属性，比如一个自定义的navbar组件可能有currentIndex属性，用于接受父组件的数据
+     - computed [计算属性]  用于根据属性来计算得出额外的值
+     - watch         [观察属性] 
+     - el                [DOM节点表达式] 将Vue实例挂载到哪个DOM节点
+     - template   [模板]  一个字符串模板，也可以通过#引用DOM节点作为模板内容
+     - render       [渲染函数] 用于js生成组件模板，优先级高于el和template
+     - 生命周期方法（参考上文生命周期部分） beforeCreate|created|beforeMount|Mounted|beforeUpdate|updated|activeted | deactivated | beforeDestroy| detroyed | errorCaptured
+     - directives   [指令列表]
+     - filters          [过滤器] 常用于一些文本格式化，参见[官方文档](https://cn.vuejs.org/v2/guide/filters.html)和[博客](https://segmentfault.com/a/1190000014528014)
+     - components[组件列表]
+
+   - 出现组件嵌套时，通讯方式
+
+     - 父组件给子组件的属性赋值来向下传值
+
+       ```vue
+       Vue.component('blog-post', {
+         props: ['title'],
+         template: '<h3>{{ title }}</h3>'
+       })
+       <blog-post title="My journey with Vue"></blog-post>
+       <blog-post title="Blogging with Vue"></blog-post>
+       <blog-post title="Why Vue is so fun"></blog-post>
+       ```
+
+       
+
+     - 子组件子组件通过$emit方法触发事件来向上传值 
+
+       ```vue
+       <button v-on:click="$emit('enlarge-text', 0.1)">
+         Enlarge text
+       </button>
+       ```
+
+   - 通过插槽slot分发内容，在定义组件模板时留下slot，外部调用时填入的内容被插入到slot处
+
+     ```vue
+     Vue.component('alert-box', {
+       template: `
+       <div class="demo-alert-box">
+           <strong>Error!</strong>
+           <slot></slot>   
+         </div>
+       `
+     })
+     
+     <alert-box>
+       Something bad happened.
+     </alert-box>
+     ```
+     
+   - 组件局部注册：直接new创建组件，或者在模块系统中使用import导入组件，实现局部注册，只在本组件内部使用。应该尽量局部注册而不是全局注册组件（除非必要）
+
+   - 其他注意点：
+
+     - 组件名为驼峰式（NavBar）或者短横线（nav-bar）命名法
+     
+     - data属性是一个函数，这点与之前的模板用法不同
+
+     - 组件必须只有一个根元素，也就是最外围只有一个包裹的元素
+     
+     - 插槽可以用来充当layout
+     
+       ```vue
+       <!-- 定义组件base-layout -->
+       <div class="container">
+         <header>
+           <slot name="header"></slot>
+         </header>
+         <main>
+           <slot></slot>
+         </main>
+         <footer>
+           <slot name="footer"></slot>
+         </footer>
+       </div>
+       
+       <!-- 使用组件 -->
+       <base-layout>
+         <template v-slot:header>
+           <h1>Here might be a page title</h1>
+         </template>
+       
+         <template v-slot:default>
+           <p>A paragraph for the main content.</p>
+           <p>And another one.</p>
+         </template>
+       
+         <template v-slot:footer>
+           <p>Here's some contact info</p>
+         </template>
+       </base-layout>
+       ```
+     
+       
+
    - 单文件组件	
 
 5. vue实战
   - npm / yarn
   - webpack
   - vue-router及SPA
+  - 
