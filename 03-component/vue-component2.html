@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue组件</title>
+    <script src="vue.js"></script>
+    <style>
+        .blog-post{
+            width:180px;
+            height: 250px;
+            border: 1px dashed gray;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+
+        <blog-post @enlarge-text='handleEnlargeText' :style='{fontSize:postFontSize+"em"}' title="es6入门教程" content="<div>第一段</div><div>第二段</div>"></blog-post>
+
+        <blog-post title="JDK10忙人指南" content="<div>很容易</div><div>但你学不会...</div>"></blog-post>
+        
+    </div>
+    <script>
+    Vue.component("blog-post",{
+        props:['title','content'],
+        data : function(){
+            return {
+                count:0
+            }
+        },
+        template: `
+            <div class="blog-post">
+                <h3>{{ title }}</h3>
+                <button @click='$emit("enlarge-text",0.2)'>
+                    Enlarge text
+                </button>
+                <div v-html="content"></div>
+            </div>
+        `
+    });
+
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            postFontSize:1
+        },
+        methods:{
+            handleEnlargeText:function(amount){
+                this.postFontSize+=amount;
+            }
+        }
+        
+        });
+    </script>
+</body>
+</html>

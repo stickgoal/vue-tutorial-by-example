@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车</title>
+    <script src="../res/js/vue.js"></script>
+    <style>
+        .cart-item{
+            height: 2em;
+            line-height: 2em;
+            border:1xp dashed gray;
+        }
+    </style>
+</head>
+<body>
+    <div id="cart">
+        <div class="cart-item-list">
+          
+            
+            <cart-item @changeAmount='handleChangeAmount' v-for='item in items' :product='item.product' :count='item.count' :key='item.name'></cart-item>
+
+        </div>
+        <div class="summary">
+            {{totalAmount}}
+        </div>
+    </div>
+    <script>
+        Vue.component("cart-item",{
+            props:['product','count'],
+            data:function(){
+                return{
+                    prod:this.product,
+                    pCount:this.count
+                }
+            },
+            computed:{
+                totalAmount:function(){
+                    return this.prod.price*this.pCount
+                }
+            },
+            template:`
+            <div class="cart-item">
+                <img class='productImg' :src='prod.img' />
+                <span class='name'>{{prod.name}}</span>
+                <span class='price'>{{prod.price}}</span>
+                <input type='number' @change='$emit("changeAmount",totalAmount)' v-model='pCount'/>
+                <span class='price'>{{totalAmount}}</span>
+            </div> 
+            `
+        });
+
+        var vm = new Vue({
+            el:"#cart",
+            data:{
+                items:[
+                    {product:{img:'',name:'土鸡蛋',price:12.5},count:1},
+                    {product:{img:'',name:'火锅底料',price:22.5},count:2}
+                ]
+            },
+            computed:{
+                totalAmount:function(){
+                    var ta = 0;
+                    this.items.forEach(function(e){ta+=e.porduct.price*e.count});
+                    return ta;
+                }
+            },
+            methods:{
+                handleChangeAmount:function(totalAmount){
+
+                }   
+            }
+        });
+    
+    </script>
+  
+</body>
+</html>

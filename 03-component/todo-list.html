@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>待办清单</title>
+    <script src="../res/js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" @keyup.enter="add" v-model="todoConent" />
+        <todo-item @finish="finish" v-for="t in todos" :id="t.id" :content="t.content" :key="t.id" />
+    </div>
+    <script>
+        Vue.component('todo-item', {
+            props: ['content', 'id'],
+            template: `
+           <div class="todo-item">
+                <input type="checkbox" @click='$emit("finish",id)'>{{content}}
+            </div>
+           `
+        });
+        new Vue({
+            el: "#app",
+            data: {
+                todoConent: '',
+                todos: [{
+                        id: 1,
+                        content: "买西瓜"
+                    },
+                    {
+                        id: 2,
+                        content: "买西瓜刀"
+                    },
+                    {
+                        id: 3,
+                        content: "买西瓜勺"
+                    },
+                    {
+                        id: 4,
+                        content: "买砧板"
+                    },
+                ]
+            },
+            methods: {
+                finish: function (id) {
+                    console.log(id);
+                    var found = this.todos.find(function (e) {
+                        return e.id === id;
+                    });
+
+                    var index = this.todos.indexOf(found);
+
+                    this.todos.splice(index, 1);
+                },
+                add: function () {
+                   
+                    var maxIndex = this.todos.length == 0?0:this.todos[this.todos.length - 1].id;
+                    this.todos.push({
+                        id: maxIndex + 1,
+                        content: this.todoConent
+                    });
+                    this.todoConent='';
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

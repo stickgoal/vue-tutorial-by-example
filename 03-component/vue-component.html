@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue组件</title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <button-counter start="5"></button-counter>
+        <button-counter start="3"></button-counter>
+    </div>
+    <script>
+        Vue.component("button-counter", {
+            props: ['start'],
+            data: function () {
+                return {
+                    count: 0
+                }
+            },
+            template: "<button @click='count++'>已点击{{Number(start)+count}}次!</button>"
+        });
+        var vm = new Vue({
+            el: "#app"
+        });
+    </script>
+</body>
+
+</html>
